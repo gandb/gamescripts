@@ -2,13 +2,9 @@
 #include <Date.au3>
 
 ;
-; AutoIt Version: 3.0
-; Language:       English
 ; Platform:       Win9x/NT
 ; Author:         Jonathan Bennett (jon at autoitscript dot com)
 ;
-; Script Function:
-;   Opens Notepad, types in some text and then quits the application.
 ;
 
 ;;;

@@ -11,6 +11,8 @@
 ;;;DECLARACOES
 ;;;
 Local $TIME_TO_RUN = 0
+local $MAX_STEPS_WALK = 0
+Local $MAX_ATACKS = 0
 
 Local $cont = 1
 Local $TIMES = 32
@@ -28,14 +30,44 @@ Local $iNow = $iStartTicks
 ;;;
 ;;;FUNCOES
 ;;;
+Func SetMaxAtacks($iatacks)
+	$MAX_ATACKS  = $iatacks
+    Return True
+EndFunc
+
 Func SetDuration($iMinutes)
 	$TIME_TO_RUN  = 1000 * 60 * $iMinutes
 	 $iEndTicks = $iStartTicks + $TIME_TO_RUN
     Return True
 EndFunc
 
+Func SetMaxSteps($steps)
+	$MAX_STEPS_WALK = $steps
+    Return True
+EndFunc
+
+
+
 Func EndGame()
 	ConsoleWrite("Parando de jogar" & @CRLF)
+    Return True
+EndFunc
+
+
+Func Step2()
+	Send("{UP down}")
+	Sleep(500)
+	Send("{UP up}")
+	Send("{DOWN down}")
+	Sleep(500)
+	Send("{DOWN up}")
+    Return True
+EndFunc
+
+Func Walk()
+	For $contSteps = 0 TO $MAX_STEPS_WALK
+		Step2()
+	Next
     Return True
 EndFunc
 
@@ -57,24 +89,22 @@ Func FindMonsters()
 	Send("{c down}")
 	Sleep(100)
 	Send("{c up}")
-	Sleep(500)
-	Send("{UP down}{LEFT down}")
-	Sleep(30000);
-	Send("{UP up}{LEFT up}")
-	Sleep(100)
-	Send("{RIGHT}")
-	Send("{DOWN}")
+	Walk()
     Return True
 EndFunc
 
-
-Func Atack()
+Func PrepareAtack()
 	Send("{v down}")
 	Sleep(100)
 	Send("{v up}")
 	Send("{c down}")
 	Sleep(100)
 	Send("{c up}")
+    Return True
+EndFunc
+
+Func Atack()
+	PrepareAtack()
 	Send("{x down}")
 	Sleep(100)
 	Send("{x up}")
@@ -91,7 +121,7 @@ Func AtackMonsters()
 	Local $atacks
 
 	ConsoleWrite("Atacando monstros" & @CRLF)
-	For $atacks = 0 TO 10
+	For $atacks = 0 TO $MAX_ATACKS
 		Atack()
 		Sleep(2000)
 	Next
@@ -184,6 +214,15 @@ Func ApplyHeal()
 	Send("{x DOWN}")
 	Sleep(10)
 	Send("{x UP}")
+	Send("{c DOWN}")
+	Sleep(10)
+	Send("{c UP}")
+	Send("{c DOWN}")
+	Sleep(10)
+	Send("{c UP}")
+	Send("{c DOWN}")
+	Sleep(10)
+	Send("{c UP}")
 	Sleep(1000)
     Return True
 EndFunc
@@ -227,7 +266,9 @@ EndFunc
 ;;;
 ;;;CONFIGURACOES
 ;;;
-SetDuration(60)
+SetDuration(30)
+SetMaxSteps(20)
+SetMaxAtacks(15)
 ;;;
 ;;;CONFIGURACOES FIM
 ;;;

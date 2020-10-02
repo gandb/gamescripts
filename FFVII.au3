@@ -3,7 +3,7 @@
 
 ;
 ; Platform:       Win9x/NT
-; Author:         Jonathan Bennett (jon at autoitscript dot com)
+; Author:         Edson Vicente Carli Junior
 ;
 ;
 

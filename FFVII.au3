@@ -5,7 +5,7 @@
 ; AutoIt Version: 3.0
 ; Language:       English
 ; Platform:       Win9x/NT
-; Author:         Jonathan Bennett (jon at autoitscript dot com)
+; Author:         Edson Vicente Carli Junior
 ;
 ; Script Function:
 ;   Opens Notepad, types in some text and then quits the application.

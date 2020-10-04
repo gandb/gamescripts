@@ -15,7 +15,7 @@ local $MAX_STEPS_WALK = 0
 Local $MAX_ATACKS = 0
 
 Local $cont = 1
-Local $TIMES = 32
+Local $TIMES = 1
 Local $iSec, $iMin, $iHour
 
 ; calculate with time
@@ -23,6 +23,8 @@ Local $iStartTicks = _TimeToTicks(@HOUR, @MIN, @SEC)
 ; calculate 45 minutes later
 Local $iEndTicks = $iStartTicks + $TIME_TO_RUN
 Local $iNow = $iStartTicks
+
+Local $iStepCount = 0
 ;;;
 ;;;DECLARACOES FIM
 ;;;
@@ -32,6 +34,11 @@ Local $iNow = $iStartTicks
 ;;;
 Func SetMaxAtacks($iatacks)
 	$MAX_ATACKS  = $iatacks
+    Return True
+EndFunc
+
+Func SetTimesBeforeHeal($t)
+	$TIMES  = $t
     Return True
 EndFunc
 
@@ -55,12 +62,14 @@ EndFunc
 
 
 Func Step2()
-	Send("{UP down}")
-	Sleep(500)
-	Send("{UP up}")
+	$iStepCount = $iStepCount + 1
+
 	Send("{DOWN down}")
 	Sleep(500)
 	Send("{DOWN up}")
+	Send("{UP down}")
+	Sleep(500)
+	Send("{UP up}")
     Return True
 EndFunc
 
@@ -269,6 +278,7 @@ EndFunc
 SetDuration(30)
 SetMaxSteps(20)
 SetMaxAtacks(15)
+SetTimesBeforeHeal(3)
 ;;;
 ;;;CONFIGURACOES FIM
 ;;;

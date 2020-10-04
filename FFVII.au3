@@ -62,14 +62,32 @@ EndFunc
 
 
 Func Step2()
+	;;Cada vez ele inverte iniciar pra cima ou pra baixo
+	;;pra que estatisticamente ele tenha a mesma chance de
+	;;andar uma distancia maior tanto pra cima  quanto pra baixo
+	;;ao longo de muito tempo ele fica no mesmo lugar
+
+	Local $sFirstStep
+	Local $sSecondStep
+
 	$iStepCount = $iStepCount + 1
 
-	Send("{DOWN down}")
+	if Mod( $iStepCount , 2) = 0 Then
+		$sFirstStep = "DOWN"
+		$sSecondStep = "UP"
+	Else
+		$sFirstStep = "UP"
+		$sSecondStep = "DOWN"
+	EndIf
+
+	Send("{" & $sFirstStep & " down}")
 	Sleep(500)
-	Send("{DOWN up}")
-	Send("{UP down}")
+	Send("{" & $sFirstStep & " up}")
+	Send("{" & $sSecondStep & " down}")
 	Sleep(500)
-	Send("{UP up}")
+	Send("{" & $sSecondStep & " up}")
+
+
     Return True
 EndFunc
 
@@ -275,7 +293,7 @@ EndFunc
 ;;;
 ;;;CONFIGURACOES
 ;;;
-SetDuration(30)
+SetDuration(60)
 SetMaxSteps(20)
 SetMaxAtacks(15)
 SetTimesBeforeHeal(3)

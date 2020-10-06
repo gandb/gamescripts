@@ -25,13 +25,34 @@ Local $iEndTicks = $iStartTicks + $TIME_TO_RUN
 Local $iNow = $iStartTicks
 
 Local $iStepCount = 0
+
+Const $GAME_NAME  = "FINAL FANTASY VII"
+
 ;;;
 ;;;DECLARACOES FIM
 ;;;
 
+
+
 ;;;
 ;;;FUNCOES
 ;;;
+
+Func SendSafe($command)
+	Local $activeWindowTitle = WinGetTitle("[active]")
+
+	Local $iTry = 1
+
+	while $activeWindowTitle <> $GAME_NAME
+		ConsoleWrite("Jogador saiu do jogo...aguardando ele voltar ..."  &  $iTry &  @CRLF)
+		 $activeWindowTitle = WinGetTitle("[active]")
+		 $iTry = $iTry  + 1
+		Sleep(1000)
+	WEnd
+
+	Send($command)
+EndFunc
+
 Func SetMaxAtacks($iatacks)
 	$MAX_ATACKS  = $iatacks
 
@@ -80,12 +101,12 @@ Func Step2()
 		$sSecondStep = "DOWN"
 	EndIf
 
-	Send("{" & $sFirstStep & " down}")
+	SendSafe("{" & $sFirstStep & " down}")
 	Sleep(500)
-	Send("{" & $sFirstStep & " up}")
-	Send("{" & $sSecondStep & " down}")
+	SendSafe("{" & $sFirstStep & " up}")
+	SendSafe("{" & $sSecondStep & " down}")
 	Sleep(500)
-	Send("{" & $sSecondStep & " up}")
+	SendSafe("{" & $sSecondStep & " up}")
 
 
 
@@ -99,25 +120,25 @@ Func Walk()
 EndFunc
 
 Func CleanupMenu()
-	Send("{c down}")
+	SendSafe("{c down}")
 	Sleep(100)
-	Send("{c up}")
+	SendSafe("{c up}")
 	Sleep(500)
-	Send("{c down}")
+	SendSafe("{c down}")
 	Sleep(100)
-	Send("{c up}")
+	SendSafe("{c up}")
 	Sleep(500)
-	Send("{c down}")
+	SendSafe("{c down}")
 	Sleep(100)
-	Send("{c up}")
+	SendSafe("{c up}")
 	Sleep(500)
-	Send("{c down}")
+	SendSafe("{c down}")
 	Sleep(100)
-	Send("{c up}")
+	SendSafe("{c up}")
 	Sleep(500)
-	Send("{c down}")
+	SendSafe("{c down}")
 	Sleep(100)
-	Send("{c up}")
+	SendSafe("{c up}")
 
 EndFunc
 
@@ -130,26 +151,26 @@ Func FindMonsters()
 EndFunc
 
 Func PrepareAtack()
-	Send("{v down}")
+	SendSafe("{v down}")
 	Sleep(100)
-	Send("{v up}")
-	Send("{c down}")
+	SendSafe("{v up}")
+	SendSafe("{c down}")
 	Sleep(100)
-	Send("{c up}")
+	SendSafe("{c up}")
 
 EndFunc
 
 Func Atack()
 	PrepareAtack()
-	Send("{x down}")
+	SendSafe("{x down}")
 	Sleep(100)
-	Send("{x up}")
-	Send("{x down}")
+	SendSafe("{x up}")
+	SendSafe("{x down}")
 	Sleep(100)
-	Send("{x up}")
-	Send("{x down}")
+	SendSafe("{x up}")
+	SendSafe("{x down}")
 	Sleep(100)
-	Send("{x up}")
+	SendSafe("{x up}")
 
 EndFunc
 
@@ -167,22 +188,22 @@ EndFunc
 Func GetXP()
 	ConsoleWrite("Pegando XP" & @CRLF)
 	Sleep(2000)
-	Send("xxxxxx")
+	SendSafe("xxxxxx")
 	Sleep(2000)
-	Send("xxxxxx")
+	SendSafe("xxxxxx")
 	Sleep(2000)
-	Send("xxxxxx")
+	SendSafe("xxxxxx")
 EndFunc
 
 
 Func GetItens()
 	ConsoleWrite("Pegando Itens" & @CRLF)
 	Sleep(2000)
-	Send("xxxxxx")
+	SendSafe("xxxxxx")
 	Sleep(2000)
-	Send("xxxxxx")
+	SendSafe("xxxxxx")
 	Sleep(2000)
-	Send("xxxxxx")
+	SendSafe("xxxxxx")
 EndFunc
 
 Func StartRound()
@@ -202,53 +223,53 @@ Func StartRound()
 EndFunc
 
 Func OpenMagicMenu()
-	Send("{v DOWN}")
+	SendSafe("{v DOWN}")
 	Sleep(1000)
-	Send("{v UP}")
-	Send("{DOWN DOWN}")
+	SendSafe("{v UP}")
+	SendSafe("{DOWN DOWN}")
 	Sleep(10)
-	Send("{DOWN UP}")
+	SendSafe("{DOWN UP}")
 	Sleep(1000)
 	;;selecionando menu magia
-	Send("{x DOWN}")
+	SendSafe("{x DOWN}")
 	Sleep(10)
-	Send("{x UP}")
+	SendSafe("{x UP}")
 	Sleep(1000)
 	;;selecionando o personagem
-	Send("{x DOWN}")
+	SendSafe("{x DOWN}")
 	Sleep(10)
-	Send("{x UP}")
+	SendSafe("{x UP}")
 	Sleep(1000)
 	;;selecionando o tipo de magia MAGIC
-	Send("{x DOWN}")
+	SendSafe("{x DOWN}")
 	Sleep(10)
-	Send("{x UP}")
+	SendSafe("{x UP}")
 	Sleep(1000)
 EndFunc
 
 Func ApplyAll()
 	ConsoleWrite("Aplicando no Primeiro Jogador " &  @CRLF)
-	Send("{x DOWN}")
+	SendSafe("{x DOWN}")
 	Sleep(10)
-	Send("{x UP}")
+	SendSafe("{x UP}")
 	Sleep(1000)
 	ConsoleWrite("Aplicando no Segundo Jogador " &  @CRLF)
-	Send("{DOWN DOWN}")
+	SendSafe("{DOWN DOWN}")
 	Sleep(10)
-	Send("{DOWN UP}")
+	SendSafe("{DOWN UP}")
 	Sleep(1000)
-	Send("{x DOWN}")
+	SendSafe("{x DOWN}")
 	Sleep(10)
-	Send("{x UP}")
+	SendSafe("{x UP}")
 	Sleep(1000)
 	ConsoleWrite("Aplicando no Terceiro Jogador " &  @CRLF)
-	Send("{DOWN DOWN}")
+	SendSafe("{DOWN DOWN}")
 	Sleep(10)
-	Send("{DOWN UP}")
+	SendSafe("{DOWN UP}")
 	Sleep(1000)
-	Send("{x DOWN}")
+	SendSafe("{x DOWN}")
 	Sleep(10)
-	Send("{x UP}")
+	SendSafe("{x UP}")
 	Sleep(1000)
 EndFunc
 
@@ -257,9 +278,9 @@ Func ApplyHeal()
 	CleanupMenu()
 	OpenMagicMenu()
 	;;selecionando a magia cura
-	Send("{x DOWN}")
+	SendSafe("{x DOWN}")
 	Sleep(10)
-	Send("{x UP}")
+	SendSafe("{x UP}")
 	Sleep(1000)
 	ApplyAll()
 	CleanupMenu()
@@ -273,17 +294,17 @@ Func ApplyRess()
 	CleanupMenu()
 	OpenMagicMenu()
 	;;selecionando a magia cura
-	Send("{DOWN DOWN}")
+	SendSafe("{DOWN DOWN}")
 	Sleep(10)
-	Send("{DOWN UP}")
+	SendSafe("{DOWN UP}")
 	Sleep(1000)
-	Send("{DOWN DOWN}")
+	SendSafe("{DOWN DOWN}")
 	Sleep(10)
-	Send("{DOWN UP}")
+	SendSafe("{DOWN UP}")
 	Sleep(1000)
-	Send("{x DOWN}")
+	SendSafe("{x DOWN}")
 	Sleep(10)
-	Send("{x UP}")
+	SendSafe("{x UP}")
 	ApplyAll()
 	CleanupMenu()
 
@@ -307,7 +328,7 @@ Func StartTurn()
 EndFunc
 
 Func ActiveGameWindow()
-	WinActivate("FINAL FANTASY VII")
+	WinActivate($GAME_NAME)
 EndFunc
 
 
@@ -338,8 +359,9 @@ SetTimesBeforeHeal(3)
 ;;;
 
 
-;StartGame()
-;EndGame()
-ActiveGameWindow()
-ApplyHeal()
+StartGame()
+EndGame()
+;;ActiveGameWindow()
+;;ApplyHeal()
 ;;ApplyRess()
+

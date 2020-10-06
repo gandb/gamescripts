@@ -34,30 +34,30 @@ Local $iStepCount = 0
 ;;;
 Func SetMaxAtacks($iatacks)
 	$MAX_ATACKS  = $iatacks
-    Return True
+
 EndFunc
 
 Func SetTimesBeforeHeal($t)
 	$TIMES  = $t
-    Return True
+
 EndFunc
 
 Func SetDuration($iMinutes)
 	$TIME_TO_RUN  = 1000 * 60 * $iMinutes
 	 $iEndTicks = $iStartTicks + $TIME_TO_RUN
-    Return True
+
 EndFunc
 
 Func SetMaxSteps($steps)
 	$MAX_STEPS_WALK = $steps
-    Return True
+
 EndFunc
 
 
 
 Func EndGame()
 	ConsoleWrite("Parando de jogar" & @CRLF)
-    Return True
+
 EndFunc
 
 
@@ -88,36 +88,45 @@ Func Step2()
 	Send("{" & $sSecondStep & " up}")
 
 
-    Return True
+
 EndFunc
 
 Func Walk()
 	For $contSteps = 0 TO $MAX_STEPS_WALK
 		Step2()
 	Next
-    Return True
+
+EndFunc
+
+Func CleanupMenu()
+	Send("{c down}")
+	Sleep(100)
+	Send("{c up}")
+	Sleep(500)
+	Send("{c down}")
+	Sleep(100)
+	Send("{c up}")
+	Sleep(500)
+	Send("{c down}")
+	Sleep(100)
+	Send("{c up}")
+	Sleep(500)
+	Send("{c down}")
+	Sleep(100)
+	Send("{c up}")
+	Sleep(500)
+	Send("{c down}")
+	Sleep(100)
+	Send("{c up}")
+
 EndFunc
 
 
 Func FindMonsters()
 	ConsoleWrite("Procurando monstros " & $cont  & @CRLF)
-	Send("{c down}")
-	Sleep(100)
-	Send("{c up}")
-	Sleep(500)
-	Send("{c down}")
-	Sleep(100)
-	Send("{c up}")
-	Sleep(500)
-	Send("{c down}")
-	Sleep(100)
-	Send("{c up}")
-	Sleep(500)
-	Send("{c down}")
-	Sleep(100)
-	Send("{c up}")
+	CleanupMenu()
 	Walk()
-    Return True
+
 EndFunc
 
 Func PrepareAtack()
@@ -127,7 +136,7 @@ Func PrepareAtack()
 	Send("{c down}")
 	Sleep(100)
 	Send("{c up}")
-    Return True
+
 EndFunc
 
 Func Atack()
@@ -141,7 +150,7 @@ Func Atack()
 	Send("{x down}")
 	Sleep(100)
 	Send("{x up}")
-    Return True
+
 EndFunc
 
 Func AtackMonsters()
@@ -152,7 +161,7 @@ Func AtackMonsters()
 		Atack()
 		Sleep(2000)
 	Next
-    Return True
+
 EndFunc
 
 Func GetXP()
@@ -192,10 +201,7 @@ Func StartRound()
 	$cont  = 1 + $cont
 EndFunc
 
-
-
-Func ApplyHeal()
-	ConsoleWrite("Se curando..." &  @CRLF)
+Func OpenMagicMenu()
 	Send("{v DOWN}")
 	Sleep(1000)
 	Send("{v UP}")
@@ -203,28 +209,30 @@ Func ApplyHeal()
 	Sleep(10)
 	Send("{DOWN UP}")
 	Sleep(1000)
+	;;selecionando menu magia
 	Send("{x DOWN}")
 	Sleep(10)
 	Send("{x UP}")
 	Sleep(1000)
+	;;selecionando o personagem
 	Send("{x DOWN}")
 	Sleep(10)
 	Send("{x UP}")
 	Sleep(1000)
+	;;selecionando o tipo de magia MAGIC
 	Send("{x DOWN}")
 	Sleep(10)
 	Send("{x UP}")
 	Sleep(1000)
+EndFunc
+
+Func ApplyAll()
+	ConsoleWrite("Aplicando no Primeiro Jogador " &  @CRLF)
 	Send("{x DOWN}")
 	Sleep(10)
 	Send("{x UP}")
 	Sleep(1000)
-	ConsoleWrite("Curando Primeiro Jogador " &  @CRLF)
-	Send("{x DOWN}")
-	Sleep(10)
-	Send("{x UP}")
-	Sleep(1000)
-	ConsoleWrite("Curando Segundo Jogador " &  @CRLF)
+	ConsoleWrite("Aplicando no Segundo Jogador " &  @CRLF)
 	Send("{DOWN DOWN}")
 	Sleep(10)
 	Send("{DOWN UP}")
@@ -233,7 +241,7 @@ Func ApplyHeal()
 	Sleep(10)
 	Send("{x UP}")
 	Sleep(1000)
-	ConsoleWrite("Curando Terceiro Jogador " &  @CRLF)
+	ConsoleWrite("Aplicando no Terceiro Jogador " &  @CRLF)
 	Send("{DOWN DOWN}")
 	Sleep(10)
 	Send("{DOWN UP}")
@@ -241,17 +249,44 @@ Func ApplyHeal()
 	Send("{x DOWN}")
 	Sleep(10)
 	Send("{x UP}")
-	Send("{c DOWN}")
-	Sleep(10)
-	Send("{c UP}")
-	Send("{c DOWN}")
-	Sleep(10)
-	Send("{c UP}")
-	Send("{c DOWN}")
-	Sleep(10)
-	Send("{c UP}")
 	Sleep(1000)
-    Return True
+EndFunc
+
+Func ApplyHeal()
+	ConsoleWrite("Se curando..." &  @CRLF)
+	CleanupMenu()
+	OpenMagicMenu()
+	;;selecionando a magia cura
+	Send("{x DOWN}")
+	Sleep(10)
+	Send("{x UP}")
+	Sleep(1000)
+	ApplyAll()
+	CleanupMenu()
+
+EndFunc
+
+
+
+Func ApplyRess()
+	ConsoleWrite("Trazendo os mortos à vida..." &  @CRLF)
+	CleanupMenu()
+	OpenMagicMenu()
+	;;selecionando a magia cura
+	Send("{DOWN DOWN}")
+	Sleep(10)
+	Send("{DOWN UP}")
+	Sleep(1000)
+	Send("{DOWN DOWN}")
+	Sleep(10)
+	Send("{DOWN UP}")
+	Sleep(1000)
+	Send("{x DOWN}")
+	Sleep(10)
+	Send("{x UP}")
+	ApplyAll()
+	CleanupMenu()
+
 EndFunc
 
 Func StartTurn()
@@ -266,6 +301,7 @@ Func StartTurn()
 	$cont = 1
 
 	ApplyHeal()
+	ApplyRess()
 
 	ConsoleWrite("Final de rodada" & @CRLF)
 EndFunc
@@ -284,7 +320,7 @@ Func StartGame()
 		StartTurn()
 	wend
 
-    Return True
+
 EndFunc
 ;;;
 ;;;FUNCOES FIM
@@ -293,7 +329,7 @@ EndFunc
 ;;;
 ;;;CONFIGURACOES
 ;;;
-SetDuration(60)
+SetDuration(30)
 SetMaxSteps(20)
 SetMaxAtacks(15)
 SetTimesBeforeHeal(3)
@@ -302,7 +338,8 @@ SetTimesBeforeHeal(3)
 ;;;
 
 
-StartGame()
-EndGame()
-;;ActiveGameWindow()
-;;ApplyHeal()
+;StartGame()
+;EndGame()
+ActiveGameWindow()
+ApplyHeal()
+;;ApplyRess()

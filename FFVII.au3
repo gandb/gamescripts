@@ -28,6 +28,16 @@ Local $iStepCount = 0
 
 Const $GAME_NAME  = "FINAL FANTASY VII"
 
+;;heal variables
+Local $iColumnHeal = 0
+Local $iRowHeal = 0
+Local $iCharHeal = 0
+
+;;res variables
+Local $iColumnRess = 0
+Local $iRowRess = 0
+Local $iCharRess = 0
+
 ;;;
 ;;;DECLARACOES FIM
 ;;;
@@ -37,6 +47,21 @@ Const $GAME_NAME  = "FINAL FANTASY VII"
 ;;;
 ;;;FUNCOES
 ;;;
+
+
+Func SetRess($iChar,$iCol,$iRow)
+	$iColumnRess = $iCol
+	$iRowRess = $iRow
+	$iCharRess = $iChar
+EndFunc
+
+
+Func SetHeal($iChar,$iCol,$iRow)
+	$iColumnHeal = $iCol
+	$iRowHeal = $iRow
+	$iCharHeal = $iChar
+
+EndFunc
 
 Func SendSafe($command)
 	Local $activeWindowTitle = WinGetTitle("[active]")
@@ -222,7 +247,7 @@ Func StartRound()
 	$cont  = 1 + $cont
 EndFunc
 
-Func OpenMagicMenu()
+Func OpenMagicMenu($iChar)
 	SendSafe("{v DOWN}")
 	Sleep(1000)
 	SendSafe("{v UP}")
@@ -236,6 +261,13 @@ Func OpenMagicMenu()
 	SendSafe("{x UP}")
 	Sleep(1000)
 	;;selecionando o personagem
+	Local $iIndex
+	For $iIndex = 2 TO $iChar
+		SendSafe("{DOWN DOWN}")
+		Sleep(10)
+		SendSafe("{DOWN UP}")
+		Sleep(1000)
+	Next
 	SendSafe("{x DOWN}")
 	Sleep(10)
 	SendSafe("{x UP}")
@@ -273,42 +305,48 @@ Func ApplyAll()
 	Sleep(1000)
 EndFunc
 
-Func ApplyHeal()
-	ConsoleWrite("Se curando..." &  @CRLF)
+Func LauchMagicAll($sMessage,$iChar, $iRow,$iColumn)
+	ConsoleWrite($sMessage & $iChar  &  @CRLF)
 	CleanupMenu()
-	OpenMagicMenu()
+	OpenMagicMenu($iCharRess)
 	;;selecionando a magia cura
+	Local $iIndex
+	For $iIndex = 2 TO $iColumn
+		SendSafe("{RIGHT DOWN}")
+		Sleep(10)
+		SendSafe("{RIGHT UP}")
+		Sleep(1000)
+	Next
+	For $iIndex = 2 TO $iRow
+		SendSafe("{DOWN DOWN}")
+		Sleep(10)
+		SendSafe("{DOWN UP}")
+		Sleep(1000)
+	Next
+	Sleep(1000)
 	SendSafe("{x DOWN}")
 	Sleep(10)
 	SendSafe("{x UP}")
 	Sleep(1000)
 	ApplyAll()
 	CleanupMenu()
+EndFunc
 
+Func ApplyHeal()
+	LauchMagicAll("Se curando..." ,$iCharHeal, $iRowHeal,$iColumnHeal)
 EndFunc
 
 
 
 Func ApplyRess()
-	ConsoleWrite("Trazendo os mortos à vida..." &  @CRLF)
-	CleanupMenu()
-	OpenMagicMenu()
-	;;selecionando a magia cura
-	SendSafe("{DOWN DOWN}")
-	Sleep(10)
-	SendSafe("{DOWN UP}")
-	Sleep(1000)
-	SendSafe("{DOWN DOWN}")
-	Sleep(10)
-	SendSafe("{DOWN UP}")
-	Sleep(1000)
-	SendSafe("{x DOWN}")
-	Sleep(10)
-	SendSafe("{x UP}")
-	ApplyAll()
-	CleanupMenu()
-
+	LauchMagicAll("Trazendo os mortos à vida..." ,$iCharRess, $iRowRess,$iColumnRess)
 EndFunc
+
+Func ApplyBuffer()
+	ConsoleWrite("Aplicando magias " & $cont  & @CRLF)
+	ApplyRess()
+	ApplyHeal()
+Endfunc
 
 Func StartTurn()
 	ConsoleWrite("Iniciando novo turno " & $cont  & @CRLF)
@@ -321,8 +359,7 @@ Func StartTurn()
 
 	$cont = 1
 
-	ApplyHeal()
-	ApplyRess()
+	ApplyBuffer()
 
 	ConsoleWrite("Final de rodada" & @CRLF)
 EndFunc
@@ -350,10 +387,12 @@ EndFunc
 ;;;
 ;;;CONFIGURACOES
 ;;;
-SetDuration(30)
+SetDuration(60)
 SetMaxSteps(20)
 SetMaxAtacks(15)
 SetTimesBeforeHeal(3)
+SetHeal(1,1,1) ;char;column;row;
+SetRess(3,1,2) ;char;column;row;
 ;;;
 ;;;CONFIGURACOES FIM
 ;;;

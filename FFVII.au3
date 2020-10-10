@@ -308,7 +308,7 @@ EndFunc
 Func LauchMagicAll($sMessage,$iChar, $iRow,$iColumn)
 	ConsoleWrite($sMessage & $iChar  &  @CRLF)
 	CleanupMenu()
-	OpenMagicMenu($iCharRess)
+	OpenMagicMenu($iChar)
 	;;selecionando a magia cura
 	Local $iIndex
 	For $iIndex = 2 TO $iColumn
@@ -387,12 +387,12 @@ EndFunc
 ;;;
 ;;;CONFIGURACOES
 ;;;
-SetDuration(60)
+SetDuration(30)
 SetMaxSteps(20)
-SetMaxAtacks(15)
+SetMaxAtacks(10)
 SetTimesBeforeHeal(3)
 SetHeal(1,1,1) ;char;column;row;
-SetRess(3,1,2) ;char;column;row;
+SetRess(3 ,1,2) ;char;column;row;
 ;;;
 ;;;CONFIGURACOES FIM
 ;;;
